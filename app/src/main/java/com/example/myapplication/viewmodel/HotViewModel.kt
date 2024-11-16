@@ -14,12 +14,15 @@ class HotViewModel : ViewModel() {
     // User 목록 관리 (초기값 설정)
     private val _users = MutableLiveData<List<User>>().apply {
         value = listOf(
-            User("ㅇㅇㅇ님", "남기", "떠나기"),
-            User("ㅁㅁㅁ님", "짜장", "짬뽕"),
-            User("ㅂㅂㅂ님", "옷", "바지"),
-            User("ㅅㅅㅅ님", "취업", "대학원"),
-            User("ㅋㅋㅋ님", "아이폰", "갤럭시"),
-            User("ㅈㅈㅈ님", "고백", "고백X")
+            User("김철수", "남기", "떠나기"),
+            User("신짱구", "짜장", "짬뽕"),
+            User("이유리", "옷", "바지"),
+            User("맹구", "취업", "대학원"),
+            User("이훈이", "아이폰", "갤럭시"),
+            User("신짱아", "고백", "고백X"),
+            User("신형만", "내과", "외과"),
+            User("봉미선", "빨래", "화장실 청소"),
+        User("두목님", "유치원", "교사"),
         )
     }
     val users: LiveData<List<User>>

@@ -62,6 +62,7 @@ class UsersAdapter(private var users: List<User>,
         //사용자 선택 텍스트 설정
 
         private fun ListUsersBinding.setChoices(user: User) {
+            txtName.text = user.name
             firstChoice.text = user.first_Choice
             secondChoice.text = user.second_Choice
         }
