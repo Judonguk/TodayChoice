@@ -71,7 +71,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rec_users"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:background="#FFFFFF" />
         </FrameLayout>
 
         <!-- 카테고리 선택 -->
@@ -87,7 +88,7 @@
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#B0BAD5"
+            android:background="#FFFFFF"
             android:orientation="horizontal">
 
             <TableLayout

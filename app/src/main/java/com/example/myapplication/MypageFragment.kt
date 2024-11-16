@@ -1,92 +1,99 @@
 package com.example.myapplication
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.databinding.FragmentMypageBinding
 import com.example.myapplication.viewmodel.HotViewModel
 
-class MypageFragment: Fragment() {
+class MypageFragment : Fragment() {
 
-    private val advise  = arrayOf(
-        User("ㅇㅇㅇ님","남기","떠나기"),
-        User("ㅁㅁㅁ님","짜장","짬뽕"),
-        User("ㅂㅂㅂ님","옷","바지"),
-        User("ㅅㅅㅅ님","취업","대학원"),
-        User("ㅋㅋㅋ님","아이폰","갤럭시"),
-        User("ㅈㅈㅈ님","고백","고백X"),
-        )
+    private var _binding: FragmentMypageBinding? = null
+    private val binding get() = _binding!!
 
-    private val viewModel: HotViewModel by viewModels()
+    // ViewModel 초기화 (Activity 범위에서 공유)
+    private val viewModel: HotViewModel by activityViewModels()
 
-
-
+    // Adapter 초기화
+    private val fullInformationAdapter by lazy {
+        UsersAdapter(emptyList(), showImageAndName = true, viewModel = viewModel)
+    }
+    private val noInformationAdapter by lazy {
+        UsersAdapter(emptyList(), showImageAndName = false, viewModel = viewModel)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val binding = FragmentMypageBinding.inflate(inflater,container,false)
-        binding.recAdviseChoice.layoutManager = LinearLayoutManager(requireContext())
-        binding.recAdviseChoice.adapter=UsersAdapter(advise, showImageAndName = true,viewModel)
+    ): View {
+        _binding = FragmentMypageBinding.inflate(inflater, container, false)
 
-        binding.recMyChoice.layoutManager = LinearLayoutManager(requireContext())
-        binding.recMyChoice.adapter=UsersAdapter(advise, showImageAndName = false,viewModel)
-        fun changeFragment(frag: Fragment) {
-            //Fragment 설정
-            parentFragmentManager.beginTransaction().run {
-                replace(R.id.frm_frag, frag)
-                commit()
-            }
-        }
-        binding.run{
-            homeButton.setOnClickListener {
-                changeFragment(MainpageFragment())
-            }
-        }
+        setupRecyclerViews()
+        observeViewModel()
+        setupListeners()
+
         return binding.root
-
     }
 
 
 
+    //RecyclerView 초기화
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-    companion object {
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            mypageFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    private fun setupRecyclerViews() {
+        with(binding) {
+            // RecyclerView 설정
+            recAdviseChoice.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = fullInformationAdapter
             }
+            recMyChoice.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = noInformationAdapter
+            }
+        }
     }
- */
+
+
+    //ViewModel의 데이터를 관찰하여 RecyclerView 업데이트
+
+    private fun observeViewModel() {
+        // 모든 정보가 포함된 데이터를 관찰
+        viewModel.users.observe(viewLifecycleOwner) { users ->
+            fullInformationAdapter.updateUsers(users)
+        }
+
+        // 제한된 정보를 관찰
+        viewModel.decisionsWithoutInfo.observe(viewLifecycleOwner) { users ->
+            noInformationAdapter.updateUsers(users)
+        }
+    }
+
+
+    //클릭 이벤트 등 Listener 설정
+
+    private fun setupListeners() {
+        binding.homeButton.setOnClickListener {
+            navigateToFragment(MainpageFragment())
+        }
+    }
+
+
+     //다른 Fragment로 전환
+    private fun navigateToFragment(fragment: Fragment) {
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.frm_frag, fragment)
+            addToBackStack(null) // 뒤로 가기 스택 추가
+            commit()
+        }
+    }
+
+    //메모리 누수를 방지하기 위해 View 관련 리소스 해제
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

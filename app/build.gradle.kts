@@ -42,6 +42,7 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation("androidx.fragment:fragment-ktx:1.8.4")
+    implementation("androidx.lifecycle:lifecycle-livedata:2.8.7")
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)

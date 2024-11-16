@@ -5,53 +5,105 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.databinding.FragmentMainpageBinding
-import com.example.myapplication.databinding.FragmentMypageBinding
 import com.example.myapplication.viewmodel.HotViewModel
 
 class MainpageFragment : Fragment() {
 
-    private val viewModel:HotViewModel by viewModels() // viewModel 초기화
+    private var _binding: FragmentMainpageBinding?=null
+    private val binding get() = _binding!!
 
-    // data set
-    val users = arrayOf(
-        User("ㅇㅇㅇ님","남기","떠나기"),
-        User("ㅁㅁㅁ님","짜장","짬뽕"),
-        User("ㅂㅂㅂ님","옷","바지"),
-        User("ㅅㅅㅅ님","취업","대학원"),
-        User("ㅋㅋㅋ님","아이폰","갤럭시"),
-        User("ㅈㅈㅈ님","고백","고백X"),
-        )
+    // ViewModel 초기화 (Activity 범위 공유)
+    private val viewModel: HotViewModel by activityViewModels() // viewModel 초기화 (FRAGMENT 바뀔떄마다 뷰모델 사라짐)
+
+    // Adapter를 by lazy로 초기화
+    private val adapter by lazy {
+        UsersAdapter(emptyList(), showImageAndName = true, viewModel = viewModel)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val binding = FragmentMainpageBinding.inflate(inflater,container,false)
+    ): View {
+        _binding = FragmentMainpageBinding.inflate(inflater, container, false)
 
-        binding.recUsers.layoutManager = LinearLayoutManager(requireContext())
-        binding.recUsers.adapter=UsersAdapter(users, showImageAndName = true,viewModel = viewModel)
+        setupRecyclerView()
+        observeViewModel()
+        setupListners()
 
-        fun changeFragment(frag: Fragment) {
-            //Fragment 설정
-            parentFragmentManager.beginTransaction().run {
-                replace(R.id.frm_frag, frag)
-                commit()
-            }
-        }
-        binding.run {
-            profileButton.setOnClickListener {
-                changeFragment(MypageFragment())
-            }
-        }
         return binding.root
-
     }
 
+    //recyclerview 초기화
+
+    private fun setupRecyclerView(){
+        binding.recUsers.layoutManager = LinearLayoutManager(context)
+        binding.recUsers.adapter = adapter
+    }
+
+    //viewmodel의 데이터를 관찰하여 UI업데이트
+
+    private fun observeViewModel(){
+        viewModel.users.observe(viewLifecycleOwner) { users ->
+            adapter.updateUsers(users)
+        }
+    }
+
+    // 클릭 이벤트 등 listener 설정
+
+    private fun setupListners(){
+        binding.profileButton.setOnClickListener {
+            changeFragment(MypageFragment())
+        }
+    }
+
+    // 다른 Fragment로 전환
+    private fun changeFragment(frag: Fragment) {
+        parentFragmentManager.beginTransaction().run {
+            replace(R.id.frm_frag, frag)
+            addToBackStack(null)// 뒤로 가기 스택에 추가
+            commit()
+        }
+    }
+
+    // 메모리 누수 방지를 위해  binding 해제
+    override fun onDestroyView(){
+        super.onDestroyView()
+        _binding = null
+    }
+}
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   /* //VIEW MODEL 함수 VAL A: VIEWMODEL()
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    // 함수분리 안됨 함수안에 함수 말안됨
+    // FRAGMENT인데 rament -> 메모리 누수 , framgentview( b)
+
+    // FRAGMENT < FRAGMENT VIEW(빨리끝남)
+
+*/
 
 
 
@@ -71,4 +123,3 @@ class MainpageFragment : Fragment() {
 
 
      */
-}
