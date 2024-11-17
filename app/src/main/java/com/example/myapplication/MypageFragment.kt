@@ -86,7 +86,6 @@ class MypageFragment : Fragment() {
     private fun navigateToFragment(fragment: Fragment) {
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.frm_frag, fragment)
-            addToBackStack(null) // 뒤로 가기 스택 추가
             commit()
         }
     }

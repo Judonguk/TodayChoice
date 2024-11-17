@@ -49,6 +49,7 @@ class MainpageFragment : Fragment() {
         viewModel.users.observe(viewLifecycleOwner) { users ->
             adapter.updateUsers(users)
         }
+
     }
 
     // 클릭 이벤트 등 listener 설정
@@ -57,13 +58,14 @@ class MainpageFragment : Fragment() {
         binding.profileButton.setOnClickListener {
             changeFragment(MypageFragment())
         }
+        binding.loadingButton.setOnClickListener{
+            viewModel.sortUsersByViewCount() // 조회수 정렬
+        }
     }
-
     // 다른 Fragment로 전환
     private fun changeFragment(frag: Fragment) {
         parentFragmentManager.beginTransaction().run {
             replace(R.id.frm_frag, frag)
-            addToBackStack(null)// 뒤로 가기 스택에 추가
             commit()
         }
     }

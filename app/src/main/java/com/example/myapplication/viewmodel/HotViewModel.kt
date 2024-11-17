@@ -14,15 +14,15 @@ class HotViewModel : ViewModel() {
     // User 목록 관리 (초기값 설정)
     private val _users = MutableLiveData<List<User>>().apply {
         value = listOf(
-            User("김철수", "남기", "떠나기"),
-            User("신짱구", "짜장", "짬뽕"),
-            User("이유리", "옷", "바지"),
-            User("맹구", "취업", "대학원"),
-            User("이훈이", "아이폰", "갤럭시"),
-            User("신짱아", "고백", "고백X"),
-            User("신형만", "내과", "외과"),
-            User("봉미선", "빨래", "화장실 청소"),
-        User("두목님", "유치원", "교사"),
+            User("김철수", "남기", "떠나기",0),
+            User("신짱구", "짜장", "짬뽕",0),
+            User("이유리", "옷", "바지",0),
+            User("맹구", "취업", "대학원",0),
+            User("이훈이", "아이폰", "갤럭시",0),
+            User("신짱아", "고백", "고백X",0),
+            User("신형만", "내과", "외과",0),
+            User("봉미선", "빨래", "화장실 청소",0),
+        User("두목님", "유치원", "교사",0),
         )
     }
     val users: LiveData<List<User>>
@@ -35,7 +35,7 @@ class HotViewModel : ViewModel() {
 
     /**
      * 특정 User의 조회수를 증가시키는 메서드
-     * @param position 조회수를 증가시킬 User의 위치
+     * position 조회수를 증가시킬 User의 위치
      */
     fun incrementViewCountForUser(position: Int) {
         _users.value = _users.value?.mapIndexed { index, user ->
@@ -47,5 +47,13 @@ class HotViewModel : ViewModel() {
                 user
             }
         }
+    }
+
+
+    /**
+     * 조회수 순으로 데이터 정렬
+     */
+    fun sortUsersByViewCount() {
+        _users.value = _users.value?.sortedByDescending { it.viewCount }
     }
 }

@@ -34,7 +34,8 @@ class UsersAdapter(private var users: List<User>,
     //데이터 업데이트
 
     fun updateUsers(newUsers: List<User>) {
-        users = newUsers // 기존 데이터를 새로운 데이터로 변경
+        users = newUsers
+        notifyDataSetChanged()// 기존 데이터를 새로운 데이터로 변경
     }
 
 
@@ -51,7 +52,7 @@ class UsersAdapter(private var users: List<User>,
 
                 // 클릭 이벤트 설정
                 root.setOnClickListener {
-                    viewModel.incrementViewCountForUser(adapterPosition)
+                    viewModel.incrementViewCountForUser(position)
                 }
             }
         }
