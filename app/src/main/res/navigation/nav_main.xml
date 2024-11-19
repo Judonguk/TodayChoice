@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
-    app:startDestination="@id/mypageFragment">
+    app:startDestination="@id/resultFragment">
 
     <fragment
         android:id="@+id/mypageFragment"
@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_mypageFragment_to_mainpageFragment"
             app:destination="@id/mainpageFragment" />
+        <action
+            android:id="@+id/action_mypageFragment_to_resultFragment"
+            app:destination="@id/resultFragment" />
     </fragment>
     <fragment
         android:id="@+id/mainpageFragment"
@@ -23,5 +26,47 @@
         <action
             android:id="@+id/action_mainpageFragment_to_mypageFragment"
             app:destination="@id/mypageFragment" />
+        <action
+            android:id="@+id/action_mainpageFragment_to_askFragment"
+            app:destination="@id/askFragment" />
+        <action
+            android:id="@+id/action_mainpageFragment_to_choiceFragment"
+            app:destination="@id/choiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reasonFragment"
+        android:name="com.example.myapplication.ReasonFragment"
+        android:label="fragment_reason"
+        tools:layout="@layout/fragment_reason" >
+        <action
+            android:id="@+id/action_reasonFragment_to_mainpageFragment"
+            app:destination="@id/mainpageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="com.example.myapplication.ResultFragment"
+        android:label="fragment_result"
+        tools:layout="@layout/fragment_result" >
+        <action
+            android:id="@+id/action_resultFragment_to_reasonFragment"
+            app:destination="@id/reasonFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/choiceFragment"
+        android:name="com.example.myapplication.ChoiceFragment"
+        android:label="fragment_choice"
+        tools:layout="@layout/fragment_choice" >
+        <action
+            android:id="@+id/action_choiceFragment_to_resultFragment"
+            app:destination="@id/resultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/askFragment"
+        android:name="com.example.myapplication.AskFragment"
+        android:label="fragment_ask"
+        tools:layout="@layout/fragment_ask" >
+        <action
+            android:id="@+id/action_askFragment_to_mainpageFragment"
+            app:destination="@id/mainpageFragment" />
     </fragment>
 </navigation>

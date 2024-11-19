@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        replaceFragment(MainpageFragment())
+        replaceFragment(ResultFragment()) //실험 중 다시 돌려놓기.
 
         setContentView(binding.root)
     }
