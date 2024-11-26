@@ -41,7 +41,8 @@ class UsersAdapter(private var users: List<User>,
 
     //viewHolder 정의
 
-    inner class Holder(private val binding : ListUsersBinding,private val viewModel: HotViewModel): RecyclerView.ViewHolder(binding.root){
+    inner class Holder(private val binding : ListUsersBinding,
+                       private val viewModel: HotViewModel): RecyclerView.ViewHolder(binding.root){
 
         // 데이터를 View에 바인딩
 
@@ -52,7 +53,7 @@ class UsersAdapter(private var users: List<User>,
 
                 // 클릭 이벤트 설정
                 root.setOnClickListener {
-                    viewModel.incrementViewCountForUser(position)
+                    viewModel.incrementViewCountForUser(adapterPosition)
                 }
             }
         }
