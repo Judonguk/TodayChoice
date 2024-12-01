@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -16,20 +16,22 @@
         app:srcCompat="@drawable/icons8__24" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/txt_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginBottom="11dp"
+        android:layout_marginTop="24dp"
         android:text="신짱구"
-        app:layout_constraintBottom_toTopOf="@+id/textView6"
-        app:layout_constraintStart_toEndOf="@+id/imageView2" />
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/txt_reason"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="1번을 선택해야하는 이유는..."
@@ -39,22 +41,24 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/btn_like"
         android:layout_width="48dp"
-        android:layout_height="51dp"
-        android:layout_marginEnd="8dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="256dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/like3" />
+        app:srcCompat="@drawable/like" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/txt_like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="24dp"
         android:text="13"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton" />
+        android:textAlignment="center"
+        android:textColor="#3F51B5"
+        app:layout_constraintEnd_toEndOf="@+id/btn_like"
+        app:layout_constraintStart_toStartOf="@+id/btn_like"
+        app:layout_constraintTop_toBottomOf="@+id/btn_like" />
 </androidx.constraintlayout.widget.ConstraintLayout>

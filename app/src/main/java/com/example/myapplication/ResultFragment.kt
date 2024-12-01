@@ -8,65 +8,58 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myapplication.databinding.FragmentResultBinding
 import com.example.myapplication.viewmodel.ReasonViewModel
 import com.google.firebase.database.FirebaseDatabase
 
 class ResultFragment : Fragment() {
 
-    val viewModel: ReasonViewModel by activityViewModels()
+    var binding : FragmentResultBinding? = null
+    val viewModel: ReasonViewModel by activityViewModels() //lifecycle을 fragment가 아닌 activity에 종속시킴
+
+    val reasons = arrayOf(
+        Reason("김긍비", "이유는 딱히 없고요", 2),
+        Reason("주동욱", "이유는 저도 없고요", 120),
+        Reason("이승민", "이유는 저도 없는데요", 99),
+        Reason("임재범", "이유는 저는 있는데요", 9),
+        Reason("박정현", "이유는 저만 아는데요", 100),
+        Reason("김범수", "이유는 저도 모르는데요", 42),
+        Reason("엄희찬", "이유는 너만 아는데요", 0)
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_result, container, false) // 먼저 inflate
+        binding = FragmentResultBinding.inflate(inflater) //view를 inflate하면서 UI와 code를 연결해주는 binding을 가져옴
 
-        val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
+        binding?.recReasons?.layoutManager = LinearLayoutManager(context) //어떻게 쌓을건지 설정
+        binding?.recReasons?.adapter = ReasonsAdapter(reasons) //내부에 담을 내용 -강의에서는 임시로 만든 배열 사용. DB에서 어떻게?
 
+        return binding?.root
+    }
 
-        // 버튼 초기화
-        val button3 = view.findViewById<Button>(R.id.button3)
-        val button4 = view.findViewById<Button>(R.id.button4)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val database = FirebaseDatabase.getInstance()
-        val buttonCountsRef = database.getReference("buttonCounts")
-
-        // 초기화 (앱 실행 시 1회만 실행 필요)
-        buttonCountsRef.setValue(mapOf("button1Count" to 0, "button2Count" to 0))
-
-        progressBar.progress = 50
-
-        button3.setOnClickListener {
-            progressBar.progress += 10
-//            buttonCountsRef.child("button1Count").get().addOnSuccessListener { snapshot ->
-//                val currentCount = snapshot.getValue(Int::class.java) ?: 0
-//                buttonCountsRef.child("button1Count").setValue(currentCount + 1)
-//            }
-//
-//            // ProgressBar 업데이트
-//            buttonCountsRef.child("button1Count").get().addOnSuccessListener { snapshot ->
-//                val currentCount = snapshot.getValue(Int::class.java) ?: 0
-//                progressBar.progress = currentCount // ProgressBar 값 설정
-//            }
+        viewModel.choiceRate.observe(viewLifecycleOwner){ //viewModel에서 choiceRate 데이터를 observe
+            binding?.progressBar?.progress = viewModel.choiceRate.value!! //viewModel의 choiceRate의 value 참조
         }
 
-        button4.setOnClickListener {
-            buttonCountsRef.child("button2Count").get().addOnSuccessListener { snapshot ->
-                val currentCount = snapshot.getValue(Int::class.java) ?: 0
-                buttonCountsRef.child("button2Count").setValue(currentCount + 1)
-            }
-
-            // ProgressBar 업데이트
-            buttonCountsRef.child("button2Count").get().addOnSuccessListener { snapshot ->
-                val currentCount = snapshot.getValue(Int::class.java) ?: 0
-                progressBar.progress = currentCount // ProgressBar 값 설정
-            }
+        //곧 삭제될 친구들 ㅠㅠ
+        binding?.button3?.setOnClickListener{
+            viewModel.choiceRatePlus() //반대로 UI에서 변경되었을 때 viewModel의 데이터를 수정
         }
-
-
-
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_result, container, false)
+        binding?.button4?.setOnClickListener{
+            viewModel.choiceRateMinus()
         }
+        //ㅠㅠ
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
 }
