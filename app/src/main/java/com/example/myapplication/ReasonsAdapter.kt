@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.databinding.FragmentAskBinding
+
 import com.example.myapplication.databinding.ListReasonsBinding
 import com.example.myapplication.viewmodel.ReasonViewModel
 import androidx.fragment.app.activityViewModels
