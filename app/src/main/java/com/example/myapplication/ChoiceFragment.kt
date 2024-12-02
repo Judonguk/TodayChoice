@@ -1,59 +1,74 @@
 package com.example.myapplication
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.example.myapplication.databinding.FragmentChoiceBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ChoiceFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ChoiceFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    // View Binding 변수 선언
+    private var _binding: FragmentChoiceBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_choice, container, false)
+    ): View {
+        // View Binding 초기화
+        _binding = FragmentChoiceBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ChoiceFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ChoiceFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val question = "대학 졸업 후 무엇이 더 좋을까요?"
+        val option1 = "취업"
+        val option2 = "대학원"
+
+        // 질문 및 선택지 설정
+        binding.tvQuestion.text = question
+        binding.rbOption1.text = option1
+        binding.rbOption2.text = option2
+
+        // '제출' 버튼 클릭 리스너 설정
+        binding.submitBtn.setOnClickListener {
+            val selectedOptionId = binding.rgOptions.checkedRadioButtonId
+            val reason = binding.reasonEditText.text.toString().trim()
+
+            // 선택지 유효성 검사
+            if (selectedOptionId == -1) {
+                Toast.makeText(requireContext(), "투표 옵션을 선택하세요.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            // 이유 입력 검사
+            if (reason.isEmpty()) {
+                Toast.makeText(requireContext(), "투표 이유를 입력하세요.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // 투표 결과 확인 (예시)
+            val selectedOption = when (selectedOptionId) {
+                binding.rbOption1.id -> option1
+                binding.rbOption2.id -> option2
+                else -> ""
+            }
+
+            Toast.makeText(
+                requireContext(),
+                "선택한 옵션: $selectedOption\n이유: $reason",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

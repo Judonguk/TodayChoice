@@ -2,13 +2,11 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- 상단 바 -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,13 +15,12 @@
 
         <ImageView
             android:id="@+id/imageView4"
-            app:srcCompat="@drawable/group_24"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:contentDescription="Check Icon" />
+            app:srcCompat="@drawable/group_24" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/imageView2"
             android:layout_width="30dp"
             android:layout_height="30dp"
             app:srcCompat="@drawable/group_24" />
@@ -33,72 +30,56 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/imageView4"
-            android:layout_marginStart="10dp"
+            android:layout_alignBottom="@+id/imageView4"
+            android:layout_toStartOf="@+id/profile_button"
             android:layout_toEndOf="@+id/imageView4"
-            android:text="오늘의 결정"
+            android:text="@string/title_today_decision"
+            android:textAlignment="textStart"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/profile_button"
-            app:srcCompat="@drawable/vector"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:contentDescription="Profile Icon" />
-
-        <ImageView
-            android:id="@+id/profile_button2"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:src="@drawable/vector" />
+
     </RelativeLayout>
 
-    <!-- 투표 질문 -->
     <TextView
         android:id="@+id/tvQuestion"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="20dp"
         android:text="투표 질문을 입력하세요"
         android:textSize="20sp" />
 
-    <!-- 선택지 라디오 버튼 그룹 -->
     <RadioGroup
         android:id="@+id/rgOptions"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+        android:layout_height="wrap_content">
 
         <RadioButton
             android:id="@+id/rbOption1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="옵션 1" />
+            android:text="옵션 1"/>
 
         <RadioButton
             android:id="@+id/rbOption2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="옵션 2" />
+            android:text="옵션 2"/>
     </RadioGroup>
 
-    <!-- 이유 입력 필드 -->
-    <EditText
-        android:id="@+id/reasonEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:hint="투표 이유를 입력하세요."
-        android:inputType="textMultiLine" />
 
-    <!-- 제출 버튼 -->
     <Button
-        android:id="@+id/submitBtn"
-        android:layout_width="match_parent"
+        android:id="@+id/EntryBtn"
+        android:layout_width="384dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="투표하기" />
+        android:text="등록하기" />
 </LinearLayout>
+
