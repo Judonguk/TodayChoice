@@ -1,9 +1,11 @@
 package com.example.myapplication
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.myapplication.databinding.FragmentEntryBinding
@@ -11,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 
 class EntryFragment : Fragment() {
 
-    // View Binding 객체 선언
     private var _binding: FragmentEntryBinding? = null
     private val binding: FragmentEntryBinding
         get() = _binding ?: throw IllegalStateException("ViewBinding is not initialized")
@@ -20,7 +21,6 @@ class EntryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // View Binding 초기화
         _binding = FragmentEntryBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -28,28 +28,42 @@ class EntryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 질문 입력 처리
+        binding.tvQuestion.setOnClickListener {
+            showInputDialog("질문 입력", "질문을 입력하세요.") { input ->
+                binding.tvQuestion.text = input
+            }
+        }
+
+        // 옵션 1 입력 처리
+        binding.rbOption1.setOnClickListener {
+            showInputDialog("옵션 1 입력", "옵션 1을 입력하세요.") { input ->
+                binding.rbOption1.text = input
+            }
+        }
+
+        // 옵션 2 입력 처리
+        binding.rbOption2.setOnClickListener {
+            showInputDialog("옵션 2 입력", "옵션 2를 입력하세요.") { input ->
+                binding.rbOption2.text = input
+            }
+        }
+
         // 버튼 클릭 시 동작 설정
         binding.EntryBtn.setOnClickListener { onSubmit() }
     }
 
     private fun onSubmit() {
-        // TextView에 입력된 질문 가져오기
-        val question = binding.tvQuestion.text.toString().trim()
+        val question = binding.tvQuestion.text.toString()
+        val option1 = binding.rbOption1.text.toString()
+        val option2 = binding.rbOption2.text.toString()
 
-        // RadioButton의 텍스트로 옵션 가져오기
-        val option1 = binding.rbOption1.text.toString().trim()
-        val option2 = binding.rbOption2.text.toString().trim()
-
-        // 입력 값 유효성 검사
         if (question.isEmpty() || option1.isEmpty() || option2.isEmpty()) {
             Toast.makeText(requireContext(), "모든 필드를 입력하세요.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // SharedPreferences에 데이터 저장
         saveVotingData(question, option1, option2)
-
-        // 입력 필드 초기화
         clearFields()
     }
 
@@ -65,16 +79,49 @@ class EntryFragment : Fragment() {
     }
 
     private fun clearFields() {
-        // TextView의 텍스트 초기화
         binding.tvQuestion.text = ""
-
-        // RadioButton의 텍스트 초기화
         binding.rbOption1.text = ""
         binding.rbOption2.text = ""
     }
 
+    private fun showInputDialog(title: String, message: String, callback: (String) -> Unit) {
+        val inputField = EditText(requireContext()).apply {
+            inputType = android.text.InputType.TYPE_CLASS_TEXT // 일반 텍스트 입력 가능
+            isSingleLine = true // 한 줄 입력
+        }
+
+        AlertDialog.Builder(requireContext())
+            .setTitle(title)
+            .setMessage(message)
+            .setView(inputField)
+            .setPositiveButton("확인") { _, _ ->
+                val inputText = inputField.text.toString().trim()
+                if (inputText.isNotEmpty()) {
+                    callback(inputText)
+                } else {
+                    Toast.makeText(requireContext(), "입력이 비어 있습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("취소", null)
+            .show()
+    }
+
+    private fun setupListeners() {
+        binding.EntryBtn.setOnClickListener {
+            navigateToFragment(MainpageFragment())
+        }
+    }
+
+
+    private fun navigateToFragment(fragment: Fragment) {
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.frm_frag, fragment)
+            commit()
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // 메모리 누수를 방지하기 위해 Binding 해제
+        _binding = null
     }
 }

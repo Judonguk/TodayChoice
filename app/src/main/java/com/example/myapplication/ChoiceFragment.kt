@@ -26,9 +26,9 @@ class ChoiceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val question = "대학 졸업 후 무엇이 더 좋을까요?"
-        val option1 = "취업"
-        val option2 = "대학원"
+        val question = "dasdasd"
+        val option1 = "asda"
+        val option2 = "asdas"
 
         // 질문 및 선택지 설정
         binding.tvQuestion.text = question
@@ -64,6 +64,19 @@ class ChoiceFragment : Fragment() {
                 "선택한 옵션: $selectedOption\n이유: $reason",
                 Toast.LENGTH_SHORT
             ).show()
+        }
+    }
+
+    private fun setupListeners() {
+        binding.submitBtn.setOnClickListener {
+            navigateToFragment(MainpageFragment())
+        }
+    }
+
+    private fun navigateToFragment(fragment: Fragment) {
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.frm_frag, fragment)
+            commit()
         }
     }
 

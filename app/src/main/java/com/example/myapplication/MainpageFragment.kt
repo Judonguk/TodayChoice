@@ -12,11 +12,11 @@ import com.example.myapplication.viewmodel.HotViewModel
 
 class MainpageFragment : Fragment() {
 
-    private var _binding: FragmentMainpageBinding? = null
+    private var _binding: FragmentMainpageBinding?=null
     private val binding get() = _binding!!
 
     // ViewModel 초기화 (Activity 범위 공유)
-    private val viewModel: HotViewModel by activityViewModels()
+    private val viewModel: HotViewModel by activityViewModels() // viewModel 초기화 (FRAGMENT 바뀔떄마다 뷰모델 사라짐)
 
     // Adapter를 by lazy로 초기화
     private val adapter by lazy {
@@ -28,42 +28,44 @@ class MainpageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainpageBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
         observeViewModel()
-        setupListeners()
+        setupListners()
+
+        return binding.root
     }
 
-    // RecyclerView 초기화
-    private fun setupRecyclerView() {
+    //recyclerview 초기화
+
+    private fun setupRecyclerView(){
         binding.recUsers.layoutManager = LinearLayoutManager(context)
         binding.recUsers.adapter = adapter
     }
 
-    // ViewModel의 데이터를 관찰하여 UI 업데이트
-    private fun observeViewModel() {
+    //viewmodel의 데이터를 관찰하여 UI업데이트
+
+    private fun observeViewModel(){
         viewModel.users.observe(viewLifecycleOwner) { users ->
             adapter.updateUsers(users)
         }
+
     }
 
-    // 클릭 이벤트 등 Listener 설정
-    private fun setupListeners() {
+    // 클릭 이벤트 등 listener 설정
+
+    private fun setupListners(){
         binding.profileButton.setOnClickListener {
             changeFragment(MypageFragment())
         }
 
-        // 정렬 버튼 클릭 시 정렬된 데이터를 RecyclerView에 반영
-        binding.loadingButton.setOnClickListener {
-            viewModel.sortUsersByViewCount()
+        binding.button.setOnClickListener {
+            changeFragment(EntryFragment())
+        }
+        binding.loadingButton.setOnClickListener{
+            viewModel.sortUsersByViewCount() // 조회수 정렬
         }
     }
-
     // 다른 Fragment로 전환
     private fun changeFragment(frag: Fragment) {
         parentFragmentManager.beginTransaction().run {
@@ -72,9 +74,58 @@ class MainpageFragment : Fragment() {
         }
     }
 
-    // 메모리 누수를 방지하기 위해 binding 해제
-    override fun onDestroyView() {
+    // 메모리 누수 방지를 위해  binding 해제
+    override fun onDestroyView(){
         super.onDestroyView()
         _binding = null
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* //VIEW MODEL 함수 VAL A: VIEWMODEL()
+
+ override fun onDestroyView() {
+     super.onDestroyView()
+     _binding = null
+ }
+
+ // 함수분리 안됨 함수안에 함수 말안됨
+ // FRAGMENT인데 rament -> 메모리 누수 , framgentview( b)
+
+ // FRAGMENT < FRAGMENT VIEW(빨리끝남)
+
+*/
+
+
+
+
+
+/*
+    companion object {
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            MainpageFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
+    }
+
+
+ */
