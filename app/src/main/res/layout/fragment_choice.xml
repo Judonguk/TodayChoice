@@ -57,15 +57,16 @@
     </RelativeLayout>
 
     <!-- 투표 질문 -->
+
+    <!-- 선택지 라디오 버튼 그룹 -->
     <TextView
         android:id="@+id/tvQuestion"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="투표 질문을 입력하세요"
         android:textSize="20sp" />
 
-    <!-- 선택지 라디오 버튼 그룹 -->
     <RadioGroup
         android:id="@+id/rgOptions"
         android:layout_width="match_parent"
@@ -84,6 +85,16 @@
             android:layout_height="wrap_content"
             android:text="옵션 2" />
     </RadioGroup>
+
+    <EditText
+        android:id="@+id/etDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:hint="투표 질문에 대한 부가 설명을 입력하세요"
+        android:inputType="textMultiLine"
+        android:minHeight="80dp"
+        android:gravity="top" />
 
     <!-- 이유 입력 필드 -->
     <EditText

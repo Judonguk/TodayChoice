@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android/apk/res-auto"
+    xmlns:app2="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,12 +27,22 @@
             android:layout_height="30dp"
             app:srcCompat="@drawable/group_24" />
 
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app2:srcCompat="@drawable/group_24" />
+
         <TextView
             android:id="@+id/textView16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/imageView4"
             android:layout_alignBottom="@+id/imageView4"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="-10dp"
+            android:layout_marginBottom="0dp"
             android:layout_toStartOf="@+id/profile_button"
             android:layout_toEndOf="@+id/imageView4"
             android:text="@string/title_today_decision"
@@ -49,33 +60,43 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tvQuestion"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginBottom="20dp"
-        android:text="투표 질문을 입력하세요"
-        android:textSize="20sp" />
+    <!-- 추가된 부가 설명 EditText -->
 
     <RadioGroup
         android:id="@+id/rgOptions"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvQuestion2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="투표 질문을 입력하세요"
+            android:textSize="20sp" />
 
         <RadioButton
             android:id="@+id/rbOption1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="옵션 1"/>
+            android:text="옵션 1" />
 
         <RadioButton
             android:id="@+id/rbOption2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="옵션 2"/>
-    </RadioGroup>
+            android:text="옵션 2" />
 
+        <EditText
+            android:id="@+id/etDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:gravity="top"
+            android:hint="투표 질문에 대한 부가 설명을 입력하세요"
+            android:inputType="textMultiLine"
+            android:minHeight="80dp" />
+    </RadioGroup>
 
     <Button
         android:id="@+id/EntryBtn"
@@ -84,4 +105,3 @@
         android:layout_marginTop="20dp"
         android:text="등록하기" />
 </LinearLayout>
-
