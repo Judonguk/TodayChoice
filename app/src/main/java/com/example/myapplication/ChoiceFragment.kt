@@ -71,7 +71,7 @@ class ChoiceFragment : Fragment() {
                 .setPositiveButton("예") { _, _ ->
                     Toast.makeText(requireContext(), "투표가 완료되었습니다.", Toast.LENGTH_SHORT).show()
                     // 투표 완료 후 메인 페이지로 이동
-                    changeFragment(MainpageFragment())
+                    changeFragment(ResultFragment())
                 }
                 .setNegativeButton("아니요") { dialog, _ ->
                     dialog.dismiss()
