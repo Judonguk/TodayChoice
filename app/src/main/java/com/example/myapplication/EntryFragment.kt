@@ -50,7 +50,14 @@ class EntryFragment : Fragment() {
         }
 
         // 버튼 클릭 시 동작 설정
-        binding.EntryBtn.setOnClickListener { onSubmit() }
+        binding.EntryBtn.setOnClickListener {
+            onSubmit()
+            changeFragment(MainpageFragment())
+        }
+
+        binding.profileButton.setOnClickListener{
+            changeFragment(MypageFragment())
+        }
     }
 
     private fun onSubmit() {
@@ -106,16 +113,10 @@ class EntryFragment : Fragment() {
             .show()
     }
 
-    private fun setupListeners() {
-        binding.EntryBtn.setOnClickListener {
-            navigateToFragment(MainpageFragment())
-        }
-    }
 
-
-    private fun navigateToFragment(fragment: Fragment) {
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.frm_frag, fragment)
+    private fun changeFragment(frag: Fragment) {
+        parentFragmentManager.beginTransaction().run {
+            replace(R.id.frm_frag, frag)
             commit()
         }
     }
