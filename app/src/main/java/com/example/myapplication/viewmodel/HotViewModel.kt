@@ -1,5 +1,3 @@
-
-// HotViewModel.kt: 뷰 모델 정의
 package com.example.myapplication.viewmodel
 
 import android.util.Log
@@ -9,53 +7,76 @@ import androidx.lifecycle.ViewModel
 import com.example.myapplication.User
 import com.example.myapplication.repository.UserRepository
 
+/**
+ * Hot 화면의 데이터를 관리하는 ViewModel 클래스
+ * 사용자 목록의 조회수 관리 및 정렬 기능을 제공
+ */
 class HotViewModel : ViewModel() {
 
-    // User 목록 관리 (초기값 설정)
-    private val _users = MutableLiveData<List<User>>() // 원본 데이터
+    // 내부에서 수정 가능한 MutableLiveData
+    private val _users = MutableLiveData<List<User>>()
+    // 외부에서는 읽기 전용 LiveData로 노출
     val users: LiveData<List<User>>
         get() = _users
 
-    private var sortedUsers : List<User> = listOf()// 정렬된 데이터를 저장하는 변수
 
+    private var isViewCountSorted = false  // 정렬 상태를 추적하는 변수 추가
 
+    // UserRepository 인스턴스 생성
     private val repository = UserRepository()
-    init{
-        // Firebase 에서 사용자 데이터 관찰 시작
-        repository.observeUser(_users)
+
+    // ViewModel 초기화 시 Firebase 데이터 관찰 시작
+    init {
+        val tempLiveData = MutableLiveData<List<User>>()
+        tempLiveData.observeForever { newUsers ->
+            if (isViewCountSorted) {
+                // 정렬 상태면 정렬된 순서 유지하면서 조회수만 업데이트
+                _users.value?.let { currentUsers ->
+                    val updatedList = currentUsers.map { currentUser ->
+                        newUsers.find { it.name == currentUser.name } ?: currentUser
+                    }
+                    _users.value = updatedList
+                }
+            } else {
+                // 정렬되지 않은 상태면 Firebase 순서 그대로
+                _users.value = newUsers
+            }
+        }
+        repository.observeUser(tempLiveData)
     }
 
-     //특정 User의 조회수를 증가시키는 메서드
-     //position 조회수를 증가시킬 User의 위치
+    /**
+     * 특정 위치의 사용자 조회수를 증가시키는 메서드
+     *
+     * @param position 조회수를 증가시킬 사용자의 리스트 내 위치
+     */
     fun incrementViewCountForUser(position: Int) {
         val currentList = _users.value.orEmpty()
-        val updatedList = currentList.toMutableList()
 
-
+        // 유효한 위치인지 확인
         if (position in currentList.indices) {
             val user = currentList[position]
+            // 조회수가 증가된 새로운 User 객체 생성
             val updatedUser = user.copy(viewCount = user.viewCount + 1)
 
-            // 리스트 업데이트
-            updatedList[position] = updatedUser
-            sortedUsers = updatedList// 정렬된 상태로 유지
-
-            // Firebase에 업데이트
+            // 리스트 내 해당 위치의 데이터 업데이트
             repository.postUser(updatedUser)
+
             Log.d("HotViewModel", "User: ${user.name}, New ViewCount: ${updatedUser.viewCount}")
 
-            // LiveData 업데이트
-            _users.value =sortedUsers
         }
     }
 
-
     /**
-     * 조회수 순으로 데이터 정렬
+     * 사용자 목록을 조회수 기준으로 내림차순 정렬하는 메서드
      */
     fun sortUsersByViewCount() {
-        val currentList = _users.value.orEmpty()
-        sortedUsers = currentList.sortedByDescending { it.viewCount }
-        _users.value = sortedUsers
+        isViewCountSorted=true
+        _users.value = _users.value?.sortedByDescending { it.viewCount }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+    }
+
 }

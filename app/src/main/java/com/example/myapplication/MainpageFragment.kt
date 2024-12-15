@@ -10,25 +10,37 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.databinding.FragmentMainpageBinding
 import com.example.myapplication.viewmodel.HotViewModel
 
+/**
+ * 메인 페이지를 담당하는 Fragment
+ * 사용자 목록을 표시하고 프로필, 등록, 정렬 기능을 제공
+ */
 class MainpageFragment : Fragment() {
 
-    private var _binding: FragmentMainpageBinding?=null
+    // ViewBinding 객체 (nullable로 선언)
+    private var _binding: FragmentMainpageBinding? = null
+    // Null-safe한 binding 접근을 위한 위임 프로퍼티
     private val binding get() = _binding!!
 
-    // ViewModel 초기화 (Activity 범위 공유)
-    private val viewModel: HotViewModel by activityViewModels() // viewModel 초기화 (FRAGMENT 바뀔떄마다 뷰모델 사라짐)
+    // Activity 범위에서 공유되는 ViewModel 초기화
+    private val viewModel: HotViewModel by activityViewModels()
 
-    // Adapter를 by lazy로 초기화
+    // Adapter 지연 초기화
     private val adapter by lazy {
         UsersAdapter(emptyList(), showImageAndName = true, viewModel = viewModel)
     }
 
+    /**
+     * Fragment의 View를 생성하고 초기화하는 메서드
+     */
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        // ViewBinding 초기화
         _binding = FragmentMainpageBinding.inflate(inflater, container, false)
 
+        // UI 컴포넌트 초기화 및 설정
         setupRecyclerView()
         observeViewModel()
         setupListners()
@@ -36,37 +48,49 @@ class MainpageFragment : Fragment() {
         return binding.root
     }
 
-    //recyclerview 초기화
-
-    private fun setupRecyclerView(){
+    /**
+     * RecyclerView 초기화 및 설정
+     */
+    private fun setupRecyclerView() {
         binding.recUsers.layoutManager = LinearLayoutManager(context)
         binding.recUsers.adapter = adapter
     }
 
-    //viewmodel의 데이터를 관찰하여 UI업데이트
-
-    private fun observeViewModel(){
+    /**
+     * ViewModel의 데이터 변경을 관찰하여 UI 업데이트
+     */
+    private fun observeViewModel() {
         viewModel.users.observe(viewLifecycleOwner) { users ->
             adapter.updateUsers(users)
         }
-
     }
 
-    // 클릭 이벤트 등 listener 설정
-
-    private fun setupListners(){
+    /**
+     * 버튼 클릭 이벤트 리스너 설정
+     */
+    private fun setupListners() {
+        // 프로필 버튼 - 마이페이지로 이동
         binding.profileButton.setOnClickListener {
             changeFragment(MypageFragment())
         }
 
+        // 등록 버튼 - 등록 페이지로 이동
         binding.button.setOnClickListener {
             changeFragment(EntryFragment())
         }
-        binding.loadingButton.setOnClickListener{
-            viewModel.sortUsersByViewCount() // 조회수 정렬
+
+        // 정렬 버튼 - 조회수 기준 정렬
+        binding.loadingButton.setOnClickListener {
+            viewModel.sortUsersByViewCount()
         }
     }
-    // 다른 Fragment로 전환
+
+
+    /**
+     * Fragment 전환을 처리하는 메서드
+     *
+     * @param frag 전환할 Fragment 인스턴스
+     */
     private fun changeFragment(frag: Fragment) {
         parentFragmentManager.beginTransaction().run {
             replace(R.id.frm_frag, frag)
@@ -74,58 +98,16 @@ class MainpageFragment : Fragment() {
         }
     }
 
-    // 메모리 누수 방지를 위해  binding 해제
-    override fun onDestroyView(){
+    /**
+     * Fragment View가 제거될 때 호출
+     * 메모리 누수 방지를 위해 binding 참조 해제
+     */
+    override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* //VIEW MODEL 함수 VAL A: VIEWMODEL()
-
- override fun onDestroyView() {
-     super.onDestroyView()
-     _binding = null
- }
-
- // 함수분리 안됨 함수안에 함수 말안됨
- // FRAGMENT인데 rament -> 메모리 누수 , framgentview( b)
-
- // FRAGMENT < FRAGMENT VIEW(빨리끝남)
-
-*/
-
-
-
-
-
-/*
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MainpageFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
-
-
- */
+// 아래 주석 처리된 코드들은 불필요한 코드이므로 제거 권장:
+// - companion object와 newInstance는 현재 사용되지 않음
+// - 기타 주석 처리된 설명은 이미 위의 코드에 반영됨
