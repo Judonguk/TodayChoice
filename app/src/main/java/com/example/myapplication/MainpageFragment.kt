@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.example.myapplication.databinding.FragmentMainpageBinding
 import com.example.myapplication.viewmodel.HotViewModel
 
@@ -44,6 +46,7 @@ class MainpageFragment : Fragment() {
         setupRecyclerView()
         observeViewModel()
         setupListners()
+        viewModel.loadProfileImage()
 
         return binding.root
     }
@@ -62,6 +65,15 @@ class MainpageFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.users.observe(viewLifecycleOwner) { users ->
             adapter.updateUsers(users)
+        }
+        // 프로필 이미지 URL 관찰 추가
+        viewModel.profileImageUrl.observe(viewLifecycleOwner) { url ->
+            if (!url.isNullOrEmpty()) {
+                binding.profileButton.load(url) {
+                    crossfade(true)
+                    transformations(CircleCropTransformation())
+                }
+            }
         }
     }
 

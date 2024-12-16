@@ -5,13 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ProgressBar
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myapplication.data.Reason
 import com.example.myapplication.databinding.FragmentResultBinding
 import com.example.myapplication.viewmodel.ReasonViewModel
-import com.google.firebase.database.FirebaseDatabase
 
 class ResultFragment : Fragment() {
 

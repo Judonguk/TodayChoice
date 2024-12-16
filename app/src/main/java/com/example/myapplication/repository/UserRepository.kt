@@ -1,7 +1,7 @@
 package com.example.myapplication.repository
 
 import androidx.lifecycle.MutableLiveData
-import com.example.myapplication.User
+import com.example.myapplication.data.User
 import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

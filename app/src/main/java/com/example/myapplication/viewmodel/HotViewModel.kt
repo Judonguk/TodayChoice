@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.myapplication.User
+import com.example.myapplication.data.User
 import com.example.myapplication.repository.UserRepository
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 /**
  * Hot 화면의 데이터를 관리하는 ViewModel 클래스
@@ -13,6 +15,8 @@ import com.example.myapplication.repository.UserRepository
  */
 class HotViewModel : ViewModel() {
 
+    private val _profileImageUrl = MutableLiveData<String>()
+    val profileImageUrl: LiveData<String> = _profileImageUrl
     // 내부에서 수정 가능한 MutableLiveData
     private val _users = MutableLiveData<List<User>>()
     // 외부에서는 읽기 전용 LiveData로 노출
@@ -73,6 +77,23 @@ class HotViewModel : ViewModel() {
     fun sortUsersByViewCount() {
         isViewCountSorted=true
         _users.value = _users.value?.sortedByDescending { it.viewCount }
+    }
+
+    fun updateProfileImage(url: String) {
+        _profileImageUrl.value = url
+    }
+
+    // Firebase에서 프로필 이미지 로드
+    fun loadProfileImage() {
+        val database = Firebase.database
+        val userRef = database.getReference("user")
+
+        userRef.child("스테판").child("profileImageUrl").get()
+            .addOnSuccessListener { snapshot ->
+                snapshot.value?.toString()?.let { url ->
+                    _profileImageUrl.value = url
+                }
+            }
     }
 
     override fun onCleared() {

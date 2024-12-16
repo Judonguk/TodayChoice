@@ -1,7 +1,7 @@
-package com.example.myapplication.viewmodel
+package com.example.myapplication.data
 
 
-data class EntryData(
+data class Entry(
     val question: String = "",
     val option1: String = "",
     val option2: String = ""

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.data.User
 import com.example.myapplication.databinding.ListUsersBinding
 import com.example.myapplication.viewmodel.HotViewModel
 

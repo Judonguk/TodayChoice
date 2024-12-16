@@ -1,14 +1,12 @@
 package com.example.myapplication
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.myapplication.databinding.ListReasonsBinding
-import com.example.myapplication.viewmodel.ReasonViewModel
-import androidx.fragment.app.activityViewModels
+import com.example.myapplication.data.Reason
 
 class ReasonsAdapter(val reasons: Array<Reason>)
     : RecyclerView.Adapter<ReasonsAdapter.Holder>() { //Adapter가 하는 일: UI렌더링 시 필요한 내용을 달라고 하면 넘겨줌
