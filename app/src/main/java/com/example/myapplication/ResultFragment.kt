@@ -26,14 +26,25 @@ class ResultFragment : Fragment() {
         Reason("엄희찬", "이유는 너만 아는데요", 0)
     )
 
+    inner class recCall{
+        fun changeFragment(frag: Fragment) {
+            parentFragmentManager.beginTransaction().run {
+                replace(R.id.frm_frag, frag)
+                commit()
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentResultBinding.inflate(inflater) //view를 inflate하면서 UI와 code를 연결해주는 binding을 가져옴
 
+        val link = recCall()
+
         binding?.recReasons?.layoutManager = LinearLayoutManager(context) //어떻게 쌓을건지 설정
-        binding?.recReasons?.adapter = ReasonsAdapter(reasons) //내부에 담을 내용 -강의에서는 임시로 만든 배열 사용. DB에서 어떻게?
+        binding?.recReasons?.adapter = ReasonsAdapter(reasons, link) //내부에 담을 내용 -강의에서는 임시로 만든 배열 사용. DB에서 어떻게?
 
         return binding?.root
     }

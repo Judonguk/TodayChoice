@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.ListReasonsBinding
 import com.example.myapplication.data.Reason
 
-class ReasonsAdapter(val reasons: Array<Reason>)
+class ReasonsAdapter(val reasons: Array<Reason>, val link: ResultFragment.recCall)
     : RecyclerView.Adapter<ReasonsAdapter.Holder>() { //Adapter가 하는 일: UI렌더링 시 필요한 내용을 달라고 하면 넘겨줌
 
     //어댑터에도 뷰모델 되는지 실험..
@@ -20,11 +20,14 @@ class ReasonsAdapter(val reasons: Array<Reason>)
         return Holder(binding)
     }
 
-    //override fun getItemCount() = reasons.size
-    override fun getItemCount() = 7 //둘중 뭘 써야 할지..
+    override fun getItemCount() = reasons.size
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.bind(reasons[position])
+
+        holder.itemView.setOnClickListener{
+            link.changeFragment(ReasonFragment())
+        }
     }
 
     class Holder(private val binding: ListReasonsBinding) : RecyclerView.ViewHolder(binding.root){

@@ -29,7 +29,7 @@ class ReasonRepository {
     fun observeRate(rate: MutableLiveData<Int>){
         rateRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                rate.postValue(snapshot.value.toString().toInt()) //toString()했다가 toInt()하는게 맞는걸까.. 암튼 된다 야호!
+                rate.postValue(snapshot.value?.toString()?.toInt() ?: 0) //toString()했다가 toInt()하는게 맞는걸까.. 암튼 된다 야호!
                 //rate.postValue(snapshot.value as Int)  이건 왜 안될까..
             }
 
