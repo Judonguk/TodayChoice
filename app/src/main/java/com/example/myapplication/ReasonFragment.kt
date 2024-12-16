@@ -22,6 +22,16 @@ class ReasonFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fun changeFragment(frag: Fragment) {
+            parentFragmentManager.beginTransaction().run {
+                replace(R.id.frm_frag, frag)
+                commit()
+            }
+        }
+
+        binding?.homeButton?.setOnClickListener{
+            changeFragment(MainpageFragment())
+        }
     }
 
     override fun onDestroyView() {

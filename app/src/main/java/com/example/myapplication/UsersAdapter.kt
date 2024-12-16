@@ -18,7 +18,8 @@ import com.example.myapplication.viewmodel.HotViewModel
 class UsersAdapter(
     private var users: List<User>,
     private val showImageAndName: Boolean,
-    private val viewModel: HotViewModel
+    private val viewModel: HotViewModel,
+    private val link: MainpageFragment.recCall?
 ) : RecyclerView.Adapter<UsersAdapter.Holder>() {
 
     /**
@@ -41,6 +42,10 @@ class UsersAdapter(
      */
     override fun onBindViewHolder(holder: Holder, position: Int) {
         holder.bind(users[position], showImageAndName)
+
+        holder.itemView.setOnClickListener{
+            link!!.changeFragment(ResultFragment())
+        }
     }
 
     /**

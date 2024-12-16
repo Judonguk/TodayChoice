@@ -27,9 +27,20 @@ class MainpageFragment : Fragment() {
     // Activity 범위에서 공유되는 ViewModel 초기화
     private val viewModel: HotViewModel by activityViewModels()
 
+    val link = recCall()
+
     // Adapter 지연 초기화
     private val adapter by lazy {
-        UsersAdapter(emptyList(), showImageAndName = true, viewModel = viewModel)
+        UsersAdapter(emptyList(), showImageAndName = true, viewModel = viewModel, link)
+    }
+
+    inner class recCall{
+        fun changeFragment(frag: Fragment) {
+            parentFragmentManager.beginTransaction().run {
+                replace(R.id.frm_frag, frag)
+                commit()
+            }
+        }
     }
 
     /**

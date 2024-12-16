@@ -34,10 +34,10 @@ class MypageFragment : Fragment() {
 
     // Adapter 초기화
     private val fullInformationAdapter by lazy {
-        UsersAdapter(emptyList(), showImageAndName = true, viewModel = viewModel)
+        UsersAdapter(emptyList(), showImageAndName = true, viewModel = viewModel, null)
     }
     private val noInformationAdapter by lazy {
-        UsersAdapter(emptyList(), showImageAndName = false, viewModel = viewModel)
+        UsersAdapter(emptyList(), showImageAndName = false, viewModel = viewModel, null)
     }
 
     override fun onCreateView(
