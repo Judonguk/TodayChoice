@@ -1,5 +1,4 @@
-package com.example.myapplication
-
+import android.content.Context
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,10 +10,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.example.myapplication.MainpageFragment
+import com.example.myapplication.R
+import com.example.myapplication.UsersAdapter
 import com.example.myapplication.databinding.FragmentMypageBinding
 import com.example.myapplication.viewmodel.HotViewModel
 import com.google.firebase.Firebase
-import com.google.firebase.database.database
 import com.google.firebase.storage.storage
 
 class MypageFragment : Fragment() {
@@ -56,7 +57,6 @@ class MypageFragment : Fragment() {
     // RecyclerView 초기화
     private fun setupRecyclerViews() {
         with(binding) {
-            // RecyclerView 설정
             recAdviseChoice.apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = fullInformationAdapter
@@ -72,8 +72,12 @@ class MypageFragment : Fragment() {
     private fun observeViewModel() {
         // User 데이터 관찰
         viewModel.users.observe(viewLifecycleOwner) { users ->
-            fullInformationAdapter.updateUsers(users)
-            noInformationAdapter.updateUsers(users)
+            // 스테판의 데이터만 필터링
+            val MyData = users.filter { it.name == "스테판" }
+            val otherData = users.filter { it.name != "스테판" }
+
+            fullInformationAdapter.updateUsers(otherData)
+            noInformationAdapter.updateUsers(MyData)
         }
 
         // 프로필 이미지 URL 관찰
@@ -87,36 +91,28 @@ class MypageFragment : Fragment() {
         }
     }
 
-    // 클릭 이벤트 등 Listener 설정
     private fun setupListeners() {
         binding.homeButton.setOnClickListener {
             navigateToFragment(MainpageFragment())
         }
-        // 프로필 버튼 클릭 시 이미지 선택 다이얼로그 표시
         binding.profileButton.setOnClickListener {
             showImageSelectionDialog()
         }
     }
 
     private fun showImageSelectionDialog() {
-        // Storage 참조
         val storageRef = Firebase.storage.reference.child("profile_images")
 
-        // 모든 이미지 목록을 가져옵니다
         storageRef.listAll()
             .addOnSuccessListener { listResult ->
-                // 이미지 파일 이름 목록 생성
                 val items = listResult.items.map { it.name }.toTypedArray()
 
-                // 이미지 선택 다이얼로그 표시
                 AlertDialog.Builder(requireContext())
                     .setTitle("프로필 이미지 선택")
                     .setItems(items) { _, which ->
                         showLoading(true)
-                        // 선택된 이미지 다운로드 URL 가져오기
                         val selectedImageRef = listResult.items[which]
                         selectedImageRef.downloadUrl.addOnSuccessListener { uri ->
-                            // 선택된 이미지 URL을 데이터베이스에 저장
                             updateProfileImageUrl(uri.toString())
                         }
                     }
@@ -133,37 +129,27 @@ class MypageFragment : Fragment() {
     }
 
     private fun updateProfileImageUrl(imageUrl: String) {
-        // Firebase Realtime Database의 프로필 이미지 URL 업데이트
-        val database = Firebase.database
-        val userRef = database.getReference("user")
+        // SharedPreferences에 URL 저장
+        requireActivity().getSharedPreferences("profile", Context.MODE_PRIVATE)
+            .edit()
+            .putString("profileImageUrl", imageUrl)
+            .apply()
 
-        userRef.child("스테판").child("profileImageUrl").setValue(imageUrl)
-            .addOnSuccessListener {
-                showLoading(false)
-                Toast.makeText(
-                    requireContext(),
-                    "프로필 이미지가 업데이트되었습니다.",
-                    Toast.LENGTH_SHORT
-                ).show()
+        showLoading(false)
+        Toast.makeText(
+            requireContext(),
+            "프로필 이미지가 업데이트되었습니다.",
+            Toast.LENGTH_SHORT
+        ).show()
 
-                // ViewModel을 통해 이미지 URL 업데이트
-                viewModel.updateProfileImage(imageUrl)
-            }
-            .addOnFailureListener { e ->
-                showLoading(false)
-                Toast.makeText(
-                    requireContext(),
-                    "프로필 정보 업데이트 실패: ${e.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+        // ViewModel을 통해 이미지 URL 업데이트
+        viewModel.updateProfileImage(imageUrl)
     }
 
     private fun showLoading(show: Boolean) {
         binding.progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    // 다른 Fragment로 전환
     private fun navigateToFragment(fragment: Fragment) {
         parentFragmentManager.beginTransaction().apply {
             replace(R.id.frm_frag, fragment)
@@ -171,7 +157,6 @@ class MypageFragment : Fragment() {
         }
     }
 
-    // 메모리 누수를 방지하기 위해 View 관련 리소스 해제
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
