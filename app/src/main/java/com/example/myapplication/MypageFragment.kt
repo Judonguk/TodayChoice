@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.example.myapplication.ImageSelectionAdapter
 import com.example.myapplication.MainpageFragment
 import com.example.myapplication.R
 import com.example.myapplication.UsersAdapter
@@ -101,23 +104,32 @@ class MypageFragment : Fragment() {
     }
 
     private fun showImageSelectionDialog() {
-        val storageRef = Firebase.storage.reference.child("profile_images")
+        // 커스텀 다이얼로그 레이아웃 생성
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_image_selection, null)
+        val recyclerView = dialogView.findViewById<RecyclerView>(R.id.recyclerViewImages)
 
+        // 다이얼로그 생성
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle("프로필 이미지 선택")
+            .setView(dialogView)
+            .setNegativeButton("취소", null)
+            .create()
+
+        // RecyclerView 설정
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+
+        // Storage에서 이미지 목록 가져오기
         storageRef.listAll()
             .addOnSuccessListener { listResult ->
-                val items = listResult.items.map { it.name }.toTypedArray()
-
-                AlertDialog.Builder(requireContext())
-                    .setTitle("프로필 이미지 선택")
-                    .setItems(items) { _, which ->
-                        showLoading(true)
-                        val selectedImageRef = listResult.items[which]
-                        selectedImageRef.downloadUrl.addOnSuccessListener { uri ->
-                            updateProfileImageUrl(uri.toString())
-                        }
+                val imageAdapter = ImageSelectionAdapter(listResult.items) { selectedImageRef ->
+                    // 이미지 선택 시 처리
+                    showLoading(true)
+                    selectedImageRef.downloadUrl.addOnSuccessListener { uri ->
+                        updateProfileImageUrl(uri.toString())
+                        dialog.dismiss()
                     }
-                    .setNegativeButton("취소", null)
-                    .show()
+                }
+                recyclerView.adapter = imageAdapter
             }
             .addOnFailureListener { e ->
                 Toast.makeText(
@@ -126,6 +138,8 @@ class MypageFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+
+        dialog.show()
     }
 
     private fun updateProfileImageUrl(imageUrl: String) {

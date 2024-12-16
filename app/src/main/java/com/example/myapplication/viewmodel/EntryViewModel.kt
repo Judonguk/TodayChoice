@@ -8,7 +8,6 @@ import com.example.myapplication.repository.UserRepository
 
 class EntryViewModel : ViewModel() {
     private val userRepository = UserRepository()
-
     private val _isSaveSuccessful = MutableLiveData<Boolean>()
     val isSaveSuccessful: LiveData<Boolean> get() = _isSaveSuccessful
 
@@ -20,8 +19,10 @@ class EntryViewModel : ViewModel() {
             viewCount = 0,
         )
 
-        // UserRepository의 postUser 메서드 호출
         userRepository.postUser(user)
-        _isSaveSuccessful.value = true  // 저장 성공 표시
+        _isSaveSuccessful.value = true
+    }
+    fun resetSaveStatus(){
+        _isSaveSuccessful.value = false
     }
 }

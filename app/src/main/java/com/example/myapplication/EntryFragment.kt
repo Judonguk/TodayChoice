@@ -76,9 +76,8 @@ class EntryFragment : Fragment() {
             if (isSuccessful) {
                 showToast("투표가 등록되었습니다.")
                 resetFields()
+                viewModel.resetSaveStatus()
                 navigateToFragment(MainpageFragment())
-            } else {
-                showToast("저장에 실패했습니다.")
             }
         }
     }
