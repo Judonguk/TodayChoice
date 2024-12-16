@@ -10,7 +10,7 @@ import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import com.example.myapplication.databinding.FragmentEntryBinding
 import com.example.myapplication.viewmodel.EntryViewModel
 
@@ -18,7 +18,8 @@ class EntryFragment : Fragment() {
 
     private var _binding: FragmentEntryBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: EntryViewModel
+
+    private val viewModel: EntryViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +31,6 @@ class EntryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(EntryViewModel::class.java)
 
         setupUI()
         observeSaveStatus()
@@ -88,7 +88,7 @@ class EntryFragment : Fragment() {
         val option1 = binding.rbOption1.text.toString().trim()
         val option2 = binding.rbOption2.text.toString().trim()
 
-        if (listOf(question, option1, option2).any { it.isEmpty() }) {
+        if (listOf(question, option1, option2).any { it.isEmpty() || it == "투표 질문을 입력하세요." }) {
             showToast("모든 필드를 입력하세요.")
         } else {
             confirmSubmission(question, option1, option2)
@@ -98,8 +98,10 @@ class EntryFragment : Fragment() {
     private fun confirmSubmission(question: String, option1: String, option2: String) {
         AlertDialog.Builder(requireContext())
             .setTitle("투표 등록 확인")
-            .setMessage("질문: $question\n옵션 1: $option1\n옵션 2: $option2\n등록하시겠습니까?")
-            .setPositiveButton("예") { _, _ -> viewModel.saveEntry(question, option1, option2) }
+            .setMessage("내용이 맞습니까?\n\n선택지 1: $option1\n선택지 2: $option2")
+            .setPositiveButton("예") { _, _ ->
+                viewModel.saveEntry(question, option1, option2)
+            }
             .setNegativeButton("아니요", null)
             .show()
     }

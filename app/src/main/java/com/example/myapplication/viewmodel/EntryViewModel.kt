@@ -3,22 +3,25 @@ package com.example.myapplication.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.myapplication.repository.EntryRepository
+import com.example.myapplication.data.User
+import com.example.myapplication.repository.UserRepository
 
 class EntryViewModel : ViewModel() {
-
-    private val repository: EntryRepository = EntryRepository() // Repository를 직접 생성
+    private val userRepository = UserRepository()
 
     private val _isSaveSuccessful = MutableLiveData<Boolean>()
     val isSaveSuccessful: LiveData<Boolean> get() = _isSaveSuccessful
 
-    /**
-     * 데이터를 저장하는 함수
-     */
     fun saveEntry(question: String, option1: String, option2: String) {
-        repository.postEntry(question, option1, option2,
-            onSuccess = { _isSaveSuccessful.value = true },
-            onFailure = { _isSaveSuccessful.value = false }
+        val user = User(
+            name = "스테판",
+            first_Choice = option1,
+            second_Choice = option2,
+            viewCount = 0,
         )
+
+        // UserRepository의 postUser 메서드 호출
+        userRepository.postUser(user)
+        _isSaveSuccessful.value = true  // 저장 성공 표시
     }
 }
