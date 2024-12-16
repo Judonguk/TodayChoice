@@ -47,6 +47,7 @@ class ResultFragment : Fragment() {
 
         //곧 삭제될 친구들 ㅠㅠ
         binding?.button3?.setOnClickListener{
+
             viewModel.choiceRatePlus() //반대로 UI에서 변경되었을 때 viewModel의 데이터를 수정
         }
         binding?.button4?.setOnClickListener{
