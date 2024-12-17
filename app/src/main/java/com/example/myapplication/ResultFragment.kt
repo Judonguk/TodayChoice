@@ -13,8 +13,9 @@ import com.example.myapplication.viewmodel.ReasonViewModel
 
 class ResultFragment : Fragment() {
 
-    var binding : FragmentResultBinding? = null
-    val viewModel: ReasonViewModel by activityViewModels() //lifecycle을 fragment가 아닌 activity에 종속시킴
+    private var binding : FragmentResultBinding? = null
+    private val viewModel: ReasonViewModel by activityViewModels()
+    //lifecycle을 fragment가 아닌 activity에 종속시킴 -> fragment간 데이터 공유 가능
 
 /*
     val reasons = arrayOf(
@@ -27,18 +28,17 @@ class ResultFragment : Fragment() {
         Reason("엄희찬", "이유는 너만 아는데요", 0)
     )
 */
-    var givenText = "취업"
-    var givenText2 = "대학원"
+    private var givenText = "취업"
+    private var givenText2 = "대학원"
 
-    ////////////////////////////// inner class
-    inner class recCall{
-        fun changeFragment(frag: Fragment) {
+    inner class recCall{ //adapter 안에서 fragment에 접근하기 위해 내부 클래스
+        fun changeFragment(frag: Fragment) { //fragment 전환
             parentFragmentManager.beginTransaction().run {
                 replace(R.id.frm_frag, frag)
                 commit()
             }
         }
-        fun giveText(text: String){
+        fun giveText(text: String){ //text 전달
             givenText = text
         }
     }
@@ -47,15 +47,15 @@ class ResultFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentResultBinding.inflate(inflater, container, false) //view를 inflate하면서 UI와 code를 연결해주는 binding을 가져옴
+        binding = FragmentResultBinding.inflate(inflater, container, false)
+        //view를 inflate하면서 fragment단위로 UI와 code를 연결해주는 binding을 가져옴
         val viewModel = ViewModelProvider(this).get(ReasonViewModel::class.java)
 
         val link = recCall()
 
         binding?.recReasons?.layoutManager = LinearLayoutManager(context) //어떻게 쌓을건지 설정
-
-        val adapter = ReasonsAdapter(viewModel.reason.value ?: emptyList(), viewModel, link)
-        binding?.recReasons?.adapter = adapter //내부에 담을 내용 -강의에서는 임시로 만든 배열 사용. DB에서 어떻게?
+        val adapter = ReasonsAdapter(viewModel.reason.value ?: emptyList(), viewModel, link) //내부에 담을 내용
+        binding?.recReasons?.adapter = adapter
 
         viewModel.reason.observe(viewLifecycleOwner) { reason ->
             if (reason != null) {
@@ -71,8 +71,8 @@ class ResultFragment : Fragment() {
         viewModel.choiceRate.observe(viewLifecycleOwner){ //viewModel에서 choiceRate 데이터를 observe
             binding?.progressBar?.progress = viewModel.choiceRate.value!! //viewModel의 choiceRate의 value 참조
         }
-        viewModel.reason.observe(viewLifecycleOwner){ //viewModel에서 choiceRate 데이터를 observe
-            binding?.textView?.text = givenText //viewModel의 choiceRate의 value 참조
+        viewModel.reason.observe(viewLifecycleOwner){
+            binding?.textView?.text = givenText
             binding?.textView3?.text = givenText2
         }
 
@@ -87,7 +87,7 @@ class ResultFragment : Fragment() {
 
         fun changeFragment(frag: Fragment) {
             parentFragmentManager.beginTransaction().run {
-                replace(R.id.frm_frag, frag)
+                replace(R.id.frm_frag, frag) //frameLayout위에 fragment 교체
                 commit()
             }
         }
@@ -98,7 +98,7 @@ class ResultFragment : Fragment() {
 
     }
 
-    override fun onDestroyView() {
+    override fun onDestroyView() { //view binding 메모리 누수 방지
         super.onDestroyView()
         binding = null
     }

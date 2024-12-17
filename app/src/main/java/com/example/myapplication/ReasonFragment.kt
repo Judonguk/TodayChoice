@@ -32,7 +32,7 @@ class ReasonFragment : Fragment() {
 
         val link = recCall()
 
-        binding?.recMyChoice?.layoutManager = LinearLayoutManager(context) //어떻게 쌓을건지 설정
+        binding?.recMyChoice?.layoutManager = LinearLayoutManager(context)
         val adapter = ReasonsAdapter(viewModel.reason.value ?: emptyList(), viewModel, null)
         binding?.recMyChoice?.adapter = adapter
 

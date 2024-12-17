@@ -12,12 +12,12 @@ class ReasonRepository {
     val database = Firebase.database
     val userRef = database.getReference("reason1")
 
-    fun observeReason(reason: MutableLiveData<List<Reason>>){ //뷰모델에서 모델의 데이터 참조
+    fun observeReason(reason: MutableLiveData<List<Reason>>){
         userRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val reasonList = mutableListOf<Reason>()
-                for (childSnapshot in snapshot.children) {
-                    val reason = childSnapshot.getValue(Reason::class.java)
+                for (childSnapshot in snapshot.children) { //DB의 모든 노드 순회
+                    val reason = childSnapshot.getValue(Reason::class.java) //Reason객체로 저장
                     if (reason != null) {
                         val key = childSnapshot.key ?: ""
                         val name = key.split("_").firstOrNull() ?: ""
