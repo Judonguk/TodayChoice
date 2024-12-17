@@ -17,7 +17,7 @@ class ReasonRepository {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val reasonList = mutableListOf<Reason>()
                 for (childSnapshot in snapshot.children) { //DB의 모든 노드 순회
-                    val reason = childSnapshot.getValue(Reason::class.java) //Reason객체로 저장
+                    val reason = childSnapshot.getValue(Reason::class.java) //Reason 객체로 저장
                     if (reason != null) {
                         val key = childSnapshot.key ?: ""
                         val name = key.split("_").firstOrNull() ?: ""
