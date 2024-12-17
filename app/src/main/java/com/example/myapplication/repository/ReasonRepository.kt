@@ -29,7 +29,7 @@ class ReasonRepository {
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                //에러 처리
             }
         })
     }
