@@ -3,13 +3,14 @@ package com.example.myapplication.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.myapplication.data.Reason
 import com.example.myapplication.repository.ReasonRepository
 
 class ReasonViewModel: ViewModel() {
     private val repository = ReasonRepository()
 
-    private val _reason = MutableLiveData<String>("선택한 이유") //내부적으로는 바꿀 수 있지만
-    val reason : LiveData<String> get() = _reason //밖에 공개할 때는 바꿀 수 없는 데이터로 지정
+    private val _reason = MutableLiveData<List<Reason>>() //내부적으로는 바꿀 수 있지만
+    val reason : LiveData<List<Reason>> get() = _reason //밖에 공개할 때는 바꿀 수 없는 데이터로 지정
 
     private val _choiceRate = MutableLiveData<Int>(10)
     val choiceRate : LiveData<Int> get() = _choiceRate

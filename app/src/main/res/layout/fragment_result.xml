@@ -105,14 +105,15 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="VS"
-                    android:textAlignment="center" />
+                    android:textAlignment="textEnd" />
 
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="선택2" />
+                    android:text="선택2"
+                    android:textAlignment="textEnd" />
 
             </LinearLayout>
 
@@ -125,7 +126,7 @@
 
             <Button
                 android:id="@+id/button3"
-                android:layout_width="wrap_content"
+                android:layout_width="172dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:backgroundTint="#F44336"
@@ -135,7 +136,7 @@
 
             <Button
                 android:id="@+id/button4"
-                android:layout_width="wrap_content"
+                android:layout_width="189dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:backgroundTint="#2196F3"

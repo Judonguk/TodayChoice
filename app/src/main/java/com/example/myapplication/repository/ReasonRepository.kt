@@ -1,6 +1,8 @@
 package com.example.myapplication.repository
 
 import androidx.lifecycle.MutableLiveData
+import com.example.myapplication.data.Reason
+import com.example.myapplication.data.User
 import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -9,13 +11,23 @@ import com.google.firebase.database.database
 
 class ReasonRepository {
     val database = Firebase.database
+    val userRef = database.getReference("reason1")
+    val numRef = database.getReference("num")
 
-    val userRef = database.getReference("user")
-
-    fun observeReason(reason: MutableLiveData<String>){ //뷰모델에서 모델의 데이터 참조
+    fun observeReason(reason: MutableLiveData<List<Reason>>){ //뷰모델에서 모델의 데이터 참조
         userRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                reason.postValue(snapshot.value.toString())
+                val reasonList = mutableListOf<Reason>()
+                for (childSnapshot in snapshot.children) {
+                    val reason = childSnapshot.getValue(Reason::class.java)
+                    if (reason != null) {
+                        val key = childSnapshot.key ?: ""
+                        val name = key.split("_").firstOrNull() ?: ""
+                        reason.userId = name
+                        reasonList.add(reason)
+                    }
+                }
+                reason.postValue(reasonList)
             }
 
             override fun onCancelled(error: DatabaseError) {
