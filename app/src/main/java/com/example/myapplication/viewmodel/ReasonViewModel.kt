@@ -29,13 +29,4 @@ class ReasonViewModel: ViewModel() {
         val newRate = _choiceRate.value!! - 1
         repository.postRate(newRate)
     }
-
-    /*
-    fun choiceRateMinus(){
-        _choiceRate.value?.minus(1)
-    }
-    fun choiceRatePlus(){
-        _choiceRate.value?.plus(1)
-    }
-    */
 }

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.myapplication.data.Reason
 import com.example.myapplication.databinding.FragmentResultBinding
 import com.example.myapplication.viewmodel.ReasonViewModel
 
@@ -63,13 +62,11 @@ class ResultFragment : Fragment() {
                 adapter.updateData(reason)
             }
         }
-
         return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         viewModel.choiceRate.observe(viewLifecycleOwner){ //viewModel에서 choiceRate 데이터를 observe
             binding?.progressBar?.progress = viewModel.choiceRate.value!! //viewModel의 choiceRate의 value 참조
@@ -88,7 +85,6 @@ class ResultFragment : Fragment() {
         }
         //ㅠㅠ
 
-
         fun changeFragment(frag: Fragment) {
             parentFragmentManager.beginTransaction().run {
                 replace(R.id.frm_frag, frag)
@@ -101,8 +97,6 @@ class ResultFragment : Fragment() {
         }
 
     }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()

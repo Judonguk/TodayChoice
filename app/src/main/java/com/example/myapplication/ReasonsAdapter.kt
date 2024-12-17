@@ -4,13 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.myapplication.databinding.ListReasonsBinding
 import com.example.myapplication.data.Reason
 import com.example.myapplication.viewmodel.ReasonViewModel
 
-class ReasonsAdapter(var reasons: List<Reason>, val viewModel: ReasonViewModel, val link: ResultFragment.recCall?)
-    : RecyclerView.Adapter<ReasonsAdapter.Holder>() { //Adapter가 하는 일: UI렌더링 시 필요한 내용을 달라고 하면 넘겨줌
+class ReasonsAdapter(var reasons: List<Reason>,
+                     val viewModel: ReasonViewModel,
+                     val link: ResultFragment.recCall?)
+    : RecyclerView.Adapter<ReasonsAdapter.Holder>() {
+        //Adapter가 하는 일: UI렌더링 시 필요한 내용을 달라고 하면 넘겨줌
 
     //어댑터에도 뷰모델 되는지 실험..
     //val viewModel: ReasonViewModel by activityViewModels()
@@ -29,9 +31,8 @@ class ReasonsAdapter(var reasons: List<Reason>, val viewModel: ReasonViewModel, 
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-
-        //////////////////////////////////////////////
         holder.bind(reasons[position])
+        /////////////////////////////////////
         link?.let {
             it.giveText(reasons[position].selectedOption)
         }
@@ -45,15 +46,17 @@ class ReasonsAdapter(var reasons: List<Reason>, val viewModel: ReasonViewModel, 
 
     class Holder(private val binding: ListReasonsBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(reason: Reason){
-            /////////////////////////////
+            //////////////////////////////
             binding.txtName.text = reason.userId
             binding.txtReason.text = reason.reason
             binding.txtTest.text = reason.selectedOption
             //binding.txtLike.text = reason.viewcount.toString()
+/*
+            binding.root.setOnClickListener{
+                //Toast.makeText(binding.root.context, "유저: ${reason.name} 추천수: ${reason.viewcount}", Toast.LENGTH_SHORT).show()
+            }
 
-//            binding.root.setOnClickListener{
-//                //Toast.makeText(binding.root.context, "유저: ${reason.name} 추천수: ${reason.viewcount}", Toast.LENGTH_SHORT).show()
-//            }
+ */
         }
     }
 }

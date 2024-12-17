@@ -2,7 +2,6 @@ package com.example.myapplication.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.example.myapplication.data.Reason
-import com.example.myapplication.data.User
 import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -12,7 +11,6 @@ import com.google.firebase.database.database
 class ReasonRepository {
     val database = Firebase.database
     val userRef = database.getReference("reason1")
-    val numRef = database.getReference("num")
 
     fun observeReason(reason: MutableLiveData<List<Reason>>){ //뷰모델에서 모델의 데이터 참조
         userRef.addValueEventListener(object : ValueEventListener {
@@ -46,7 +44,7 @@ class ReasonRepository {
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                //에러 처리
             }
         })
     }
